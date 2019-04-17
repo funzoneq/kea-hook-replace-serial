@@ -1,4 +1,5 @@
-// load_unload.cc
+#include <hooks/hooks.h>
+
 using namespace isc::hooks;
 
 extern "C" {

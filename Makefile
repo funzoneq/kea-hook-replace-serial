@@ -9,13 +9,13 @@ CXXFLAGS = -I $(KEA_INCLUDE) -fPIC -Wno-deprecated -std=c++11
 LDFLAGS = -L $(KEA_LIB) -shared -lkea-dhcpsrv -lkea-dhcp++ -lkea-hooks -lkea-log -lkea-util -lkea-exceptions
 
 kea-hook-replace-serial.so: $(OBJECTS)
-    $(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) $(OBJECTS)
+	$(CXX) -o $@ $(CXXFLAGS) $(LDFLAGS) $(OBJECTS)
 
 %.o: %.cc
-    $(CXX) -MMD -MP -c $(CXXFLAGS) -o $@ $<
+	$(CXX) -MMD -MP -c $(CXXFLAGS) -o $@ $<
 
 clean:
-    rm -f src/*.o
-    rm -f kea-hook-replace-serial.so
+	rm -f src/*.o
+	rm -f kea-hook-replace-serial.so
 
 -include $(DEPS)

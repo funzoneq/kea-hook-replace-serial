@@ -1,3 +1,4 @@
+#include <hooks/hooks.h>
 #include <dhcp/pkt4.h>
 #include <dhcp/option_string.h>
 #include <log/logger.h>
@@ -21,7 +22,7 @@ extern "C" {
         if (option) {
             return option->toString();
         }
-        return "false"
+        return "false";
     }
 
     std::string extract_hex_sub_option(int optionNr, int subOptionNr, const Pkt4Ptr pkt4)
@@ -33,7 +34,7 @@ extern "C" {
                 return toText(SubPtr->toBinary(false));
             }
         }
-        return "false"
+        return "false";
     }
 
     void replace_option(int optionNr, std::string optionValue, const Pkt4Ptr pkt4) {
@@ -41,7 +42,7 @@ extern "C" {
         if (option) {
             pkt4->delOption(optionNr);
             option.reset(new OptionString(Option::V4, optionNr, optionValue));
-            pkt4->addOption(opt);
+            pkt4->addOption(option);
         }
     }
 
@@ -49,19 +50,19 @@ extern "C" {
         Pkt4Ptr response4_ptr;
         handle.getArgument("response4", response4_ptr);
 
-        string bootfile = extract_string_option(67, response4_ptr)
-        string search = "@SERIALNUMBER@"
-        size_t found = bootfile.find(search)
+        string bootfile = extract_string_option(67, response4_ptr);
+        string search = "@SERIALNUMBER@";
+        size_t found = bootfile.find(search);
         if (found != std::string::npos) {
             /* Lookup incoming packet and extract serialnr */
             Pkt4Ptr query4_ptr;
             handle.getArgument("query4", query4_ptr);
-            string serialnumber = extract_hex_sub_option(43, 4, query4_ptr)
+            string serialnumber = extract_hex_sub_option(43, 4, query4_ptr);
 
             /* Replace @SERIALNUMBER@ with $serialnumber */
-            bootfile.replace(found, search.size(), serialnumber)
+            bootfile.replace(found, search.size(), serialnumber);
 
-            replace_option(67, bootfile, response4_ptr)
+            replace_option(67, bootfile, response4_ptr);
         }
 
         return(0);
